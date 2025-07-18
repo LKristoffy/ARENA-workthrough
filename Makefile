@@ -1,27 +1,24 @@
-# Makefile for setting up the project environment
+# Makefile (minimal, Bash-based)
 
-# Define the virtual environment directory
+SHELL := /usr/bin/env bash   # use Bash so 'source' works if you really need it
 VENV_DIR := .venv
-# Uv is installed in ~/.cargo/bin/uv by default on macOS/Linux
-UV := $(HOME)/.cargo/bin/uv
 
 .PHONY: setup clean
 
 setup:
-	@echo "--- Checking for uv and installing if not present ---"
-	@if ! [ -x "$(UV)" ]; then \
-		echo "uv not found, installing..."; \
+	@echo '--- Ensuring uv is installed ---'
+	@if ! command -v uv >/dev/null 2>&1; then \
+		echo 'Installing uv…'; \
 		curl -LsSf https://astral.sh/uv/install.sh | sh; \
 	else \
-		echo "uv is already installed."; \
+		echo 'uv found at $$(command -v uv)'; \
 	fi
-	@echo "--- Creating virtual environment using uv ---"
-	@uv venv
-	@echo "--- Installing dependencies from requirements.txt ---"
+	@echo '--- Creating virtual environment ---'
+	@uv venv $(VENV_DIR)
+	@echo '--- Installing dependencies ---'
 	@uv pip install -r requirements.txt
-	@echo "--- Setup complete. Activate the venv with 'source $(VENV_DIR)/bin/activate' ---"
+	@echo "✓ Setup complete — activate with: source $(VENV_DIR)/bin/activate"
 
 clean:
-	@echo "--- Removing virtual environment ---"
+	@echo '--- Removing venv ---'
 	@rm -rf $(VENV_DIR)
-	@echo "--- Clean complete ---"

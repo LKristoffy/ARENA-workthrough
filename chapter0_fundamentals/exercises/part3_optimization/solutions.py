@@ -507,7 +507,7 @@ if MAIN:
 class ResNetFinetuningArgs:
     n_classes: int = 10
     batch_size: int = 128
-    epochs: int = 3
+    epochs: int = 5
     learning_rate: float = 1e-3
     weight_decay: float = 0.0
 
